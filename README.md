@@ -1,8 +1,8 @@
-BBSCrawler
+LinkCrawler
 ======
-#### Scrapy + MySQL LinkCrawler on 1point3acres.com
+#### A Scrapy + MySQL LinkCrawler on 1point3acres.com
 ------
-### To run the crawler, please input in console:
+#### To run the crawler, please input in console:
     python run.py
 
 v0.2<br/>
