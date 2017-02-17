@@ -5,11 +5,24 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy import Field
+from scrapy import Item
 
 
-class LinkItem(scrapy.Item):
+class ForumItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    url = scrapy.Field()
-    category = scrapy.Field()
+    url = Field()
+    name = Field()
+    pages = Field()
+    category = 'forum'
+
+
+class PostItem(Item):
+
+    category = 'post'
+
+
+class UserItem(Item):
+
+    category = 'user'
