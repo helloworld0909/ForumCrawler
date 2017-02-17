@@ -5,11 +5,10 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import MySQLdb
+from ForumCrawler import settings
 
-from LinkCrawler import settings
 
-
-class LinkPipeline(object):
+class ForumPipeline(object):
     def open_spider(self, spider):
         self.conn = MySQLdb.connect(
             host=settings.MYSQL_HOST,
@@ -22,7 +21,7 @@ class LinkPipeline(object):
         self.conn.autocommit(True)
         self.cur = self.conn.cursor()
         for table_name, table_items in settings.TABLE_INFO.items():
-            self.cur.execute('create table if not exists {}({})'.format(table_name, table_items))
+            self.cur.execute('create table if not exists {}({}) engine=MyISAM'.format(table_name, table_items))
 
     def close_spider(self, spider):
         self.conn.commit()

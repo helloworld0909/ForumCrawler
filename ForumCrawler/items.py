@@ -9,17 +9,24 @@ from scrapy import Field
 from scrapy import Item
 
 
-class ForumItem(Item):
+class BoardItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     url = Field()
     name = Field()
     pages = Field()
-    category = 'forum'
+    category = 'board'
 
 
 class PostItem(Item):
-
+    url = Field()
+    name = Field()
+    author_url = Field()
+    author_name = Field()
+    replies = Field()
+    pv = Field()
+    date_time = Field()
+    content = Field()
     category = 'post'
 
 
