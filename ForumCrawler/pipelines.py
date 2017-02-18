@@ -8,7 +8,7 @@ import MySQLdb
 from ForumCrawler import settings
 
 
-class ForumPipeline(object):
+class MySQLPipeline(object):
     def open_spider(self, spider):
         self.conn = MySQLdb.connect(
             host=settings.MYSQL_HOST,
