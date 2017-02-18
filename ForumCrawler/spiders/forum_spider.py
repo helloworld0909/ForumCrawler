@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import json
 from bs4 import BeautifulSoup as BS
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
@@ -13,29 +14,25 @@ class ForumSpider(CrawlSpider):
     rules = (
         # Board page
         Rule(LinkExtractor(allow=('bbs/forum.*html',), restrict_xpaths='//*[@id="hd"]/following::*'),
-             callback='parse_board', follow=True),
+             callback='parse_board', follow=True, process_request='append_cookies'),
         # Post page(subject)
         Rule(LinkExtractor(allow=('bbs/thread-\d+-1-',), restrict_xpaths='//*[@id="hd"]/following::*'),
-             callback='parse_post', follow=True),
+             callback='parse_post', follow=True, process_request='append_cookies'),
         # User page
         Rule(LinkExtractor(allow=('bbs/space.*html',), restrict_xpaths='//*[@id="hd"]/following::*'),
-             callback='parse_user', follow=True),
+             callback='parse_user', follow=True, process_request='append_cookies'),
         # Post page(replies)
         Rule(LinkExtractor(allow=('bbs/thread-\d+-1\d', 'bbs/thread-\d+-[2-9]'),
-             restrict_xpaths='//*[@id="hd"]/following::*'), follow=True)
+             restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies')
     )
-    # TODO cookies
+    # Get cookies from a json file
     start_urls = ['http://www.1point3acres.com/bbs/']
+    with open('cookies.json', 'r') as cookies_file:
+        cls_cookies = json.load(cookies_file)
 
-    # def start_requests(self):
-    #     url = 'http://www.1point3acres.com/bbs/'
-    #     cookies = json.load(open('cookies.json', 'r'))
-    #     return [Request(url, callback=self.parse_index, cookies=cookies, meta={'cookies': cookies})]
-    #
-    # def parse_index(self, response):
-    #     links = LinkExtractor(allow=('bbs/forum.*html',)).extract_links(response)
-    #     for link in links:
-    #         yield Request(link.url)
+    def append_cookies(self, request):
+        request.cookies = self.cls_cookies
+        return request
 
     def parse_board(self, response):
         name = response.xpath('//*[@class="xs2"]/a/text()').extract_first()
