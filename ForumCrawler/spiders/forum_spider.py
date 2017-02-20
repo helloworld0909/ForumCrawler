@@ -30,6 +30,7 @@ class ForumSpider(CrawlSpider):
     with open('cookies.json', 'r') as cookies_file:
         cls_cookies = json.load(cookies_file)
 
+    # 重写Rule类的append_cookies函数，本来是直接return request，现在加上cookies再return，实现利用cookies的login
     def append_cookies(self, request):
         request.cookies = self.cls_cookies
         return request
@@ -54,6 +55,16 @@ class ForumSpider(CrawlSpider):
     def parse_post(self, response):
         url = response.url
         name = response.xpath('//span[@id="thread_subject"]/text()').extract_first(default='')
+        try:
+            board_url = response.xpath('//div[@id="pt"]/div/a/@href').extract()[-2]
+            board_name = response.xpath('//div[@id="pt"]/div/a/text()').extract()[-2]
+        except:
+            board_url = ''
+            board_name = ''
+            print 'ERROR: post {} board_info selection error'.format(url)
+            print 'board_url xpath result:', response.xpath('//div[@id="pt"]/div/a/@href').extract()
+            print 'board_name xpath result:', response.xpath('//div[@id="pt"]/div/a/text()').extract()
+
         author_name = response.xpath('//div[@class="authi"]/a/text()').extract_first(default='')
         author_url = response.xpath('//div[@class="authi"]/a/@href').extract_first(default='')
         try:
@@ -63,7 +74,8 @@ class ForumSpider(CrawlSpider):
             pv, replies = -1, -1
         date_time = response.xpath('//div[@class="authi"]/em').re_first(r'\d+-\d+-\d+\s\d+:\d+:\d+')
 
-        # Eliminate trash nodes using bs4, maybe there is an alternative solution
+        # 删除垃圾节点，比如<i>这种；这里写的感觉不太好，待修改
+        # TODO To be improved
         raw_content = response.xpath('//td[@class="t_f"]').extract_first(default='')
         raw_content_soup = BS(raw_content, 'lxml')
         [s.extract() for s in raw_content_soup(['i', 'span'])]
@@ -76,6 +88,8 @@ class ForumSpider(CrawlSpider):
         item = PostItem()
         item['url'] = url
         item['name'] = name
+        item['board_url'] = board_url
+        item['board_name'] = board_name
         item['author_url'] = author_url
         item['author_name'] = author_name
         item['pv'] = pv

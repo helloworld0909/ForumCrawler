@@ -21,6 +21,8 @@ class BoardItem(Item):
 class PostItem(Item):
     url = Field()
     name = Field()
+    board_url = Field()
+    board_name = Field()
     author_url = Field()
     author_name = Field()
     replies = Field()

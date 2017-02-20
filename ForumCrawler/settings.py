@@ -8,6 +8,8 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+import time
+
 
 BOT_NAME = 'ForumCrawler'
 
@@ -19,7 +21,7 @@ RETRY_ENABLED = False
 DOWNLOAD_TIMEOUT = 30
 
 # Logging
-LOG_FILE = 'log.txt'
+LOG_FILE = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
 LOG_LEVEL = 'INFO'
 
 # MySQL
@@ -32,8 +34,9 @@ MYSQL_CHARSET = 'utf8'
 TABLE_INFO = {
     'board': 'url varchar(100), name nvarchar(20), pages int, PRIMARY KEY (url)',
 
-    'post': 'url varchar(100),name nvarchar(100),author_url varchar(100),author_name nvarchar(30),\
-      replies int,pv int,date_time datetime,content text,PRIMARY KEY (url)',
+    'post':
+        'url varchar(100),name nvarchar(100),board_url nvarchar(100),board_name nvarchar(20),author_url varchar(100),\
+        author_name nvarchar(30),replies int,pv int,date_time datetime,content text,PRIMARY KEY (url)',
 
     # TODO table_info
     # 'user': 'url varchar(100), uid int, name nvarchar(30)'
