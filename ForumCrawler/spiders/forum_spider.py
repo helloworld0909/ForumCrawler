@@ -1,35 +1,45 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import re
 import json
 from bs4 import BeautifulSoup as BS
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+from scrapy.http import Request
 
-from ForumCrawler.items import BoardItem, PostItem
+from ForumCrawler.items import BoardItem, PostItem, UserItem
 
 
 class ForumSpider(CrawlSpider):
     name = 'Forum'
     allowed_domains = ['1point3acres.com']
     rules = (
-        # Board page
-        Rule(LinkExtractor(allow=('bbs/forum.*html',), restrict_xpaths='//*[@id="hd"]/following::*'),
+        # Board page(first page)
+        Rule(LinkExtractor(allow=('bbs/forum-\d+-1.',), restrict_xpaths='//*[@id="hd"]/following::*'),
              callback='parse_board', follow=True, process_request='append_cookies'),
-        # Post page(subject)
+
+        # Board page(other pages) DO NOT PARSE
+        Rule(LinkExtractor(allow=('bbs/forum-\d+-1\d', 'bbs/forum-\d+-[2-9]'),
+             restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies'),
+
+        # Post page(first page)
         Rule(LinkExtractor(allow=('bbs/thread-\d+-1-',), restrict_xpaths='//*[@id="hd"]/following::*'),
              callback='parse_post', follow=True, process_request='append_cookies'),
-        # User page
-        Rule(LinkExtractor(allow=('bbs/space.*html',), restrict_xpaths='//*[@id="hd"]/following::*'),
-             callback='parse_user', follow=True, process_request='append_cookies'),
-        # Post page(replies)
+
+        # Post page(other replies) DO NOT PARSE
         Rule(LinkExtractor(allow=('bbs/thread-\d+-1\d', 'bbs/thread-\d+-[2-9]'),
-             restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies')
+             restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies'),
+
+        # User page
+        Rule(LinkExtractor(allow=('bbs/space-uid',), restrict_xpaths='//*[@id="hd"]/following::*'),
+             callback='parse_user', follow=True, process_request='append_cookies'),
     )
     # Get cookies from a json file
     start_urls = ['http://www.1point3acres.com/bbs/']
     with open('cookies.json', 'r') as cookies_file:
         cls_cookies = json.load(cookies_file)
 
+    # 重写Rule类的append_cookies函数，本来是直接return request，现在加上cookies再return，实现利用cookies的login
     def append_cookies(self, request):
         request.cookies = self.cls_cookies
         return request
@@ -41,29 +51,46 @@ class ForumSpider(CrawlSpider):
             pages = int(pages_str)
         except:
             if not name:
+                self.logger.error('parse error: Board error\nBoard url = {}'.format(response.url))
                 pages = -1
                 name = ''
             else:
                 pages = 1
         item = BoardItem()
-        item['url'] = response.url
-        item['name'] = name
+        item['board_url'] = response.url
+        item['board_name'] = name
         item['pages'] = pages
         yield item
 
     def parse_post(self, response):
-        url = response.url
-        name = response.xpath('//span[@id="thread_subject"]/text()').extract_first(default='')
-        author_name = response.xpath('//div[@class="authi"]/a/text()').extract_first(default='')
-        author_url = response.xpath('//div[@class="authi"]/a/@href').extract_first(default='')
+        item = PostItem()
+        item['post_url'] = response.url
+        item['post_name'] = response.xpath('//span[@id="thread_subject"]/text()').extract_first(default='')
+
+        try:
+            board_url = response.xpath('//div[@id="pt"]/div/a/@href').extract()[-2]
+            board_name = response.xpath('//div[@id="pt"]/div/a/text()').extract()[-2]
+        except:
+            board_url = ''
+            board_name = ''
+            self.logger.error('parse error: Post error\nPost url = {}'.format(response.url))
+        item['board_url'] = board_url
+        item['board_name'] = board_name
+
+        item['user_name'] = response.xpath('//div[@class="authi"]/a/text()').extract_first(default='')
+        item['user_url'] = response.xpath('//div[@class="authi"]/a/@href').extract_first(default='')
         try:
             pv, replies = [int(num) for num in
                            response.xpath('//div[@class="hm ptn"]/span[@class="xi1"]/text()').extract()]
         except:
             pv, replies = -1, -1
         date_time = response.xpath('//div[@class="authi"]/em').re_first(r'\d+-\d+-\d+\s\d+:\d+:\d+')
+        item['pv'] = pv
+        item['replies'] = replies
+        item['date_time'] = date_time
 
-        # Eliminate trash nodes using bs4, maybe there is an alternative solution
+        # 删除垃圾节点，比如<i>这种；这里写的感觉不太好，待修改
+        # TODO To be improved
         raw_content = response.xpath('//td[@class="t_f"]').extract_first(default='')
         raw_content_soup = BS(raw_content, 'lxml')
         [s.extract() for s in raw_content_soup(['i', 'span'])]
@@ -72,18 +99,30 @@ class ForumSpider(CrawlSpider):
         [s.extract() for s in raw_content_soup.select('.attach_nopermission')]
         [s.extract() for s in raw_content_soup.select('ignore_js_op')]
         content = raw_content_soup.text.strip()
-
-        item = PostItem()
-        item['url'] = url
-        item['name'] = name
-        item['author_url'] = author_url
-        item['author_name'] = author_name
-        item['pv'] = pv
-        item['replies'] = replies
-        item['date_time'] = date_time
         item['content'] = content
+
         yield item
 
     def parse_user(self, response):
-        # TODO parse_user
-        pass
+        item = UserItem()
+        item['uid'] = re.search(r'.*uid-(\d+)', response.url).group(1)
+        item['user_url'] = response.url
+        item['user_name'] = response.xpath(r'//h2[@class="xs2"]/a/text()').extract_first(default='')
+        try:
+            profile_url = response.xpath(r'//div[@id="nv"]/ul/li/a/@href').extract()[-1]
+        except:
+            # Fail to get profile web page, return userItem
+            self.logger.error('parse error: User profile error\nUser url = {}'.format(response.url))
+            yield item
+        else:
+            yield Request(url=profile_url, callback=self.parse_user_profile, meta={'item': item})
+
+    def parse_user_profile(self, response):
+        # The user profile page is not structured, therefore I saved them in text format
+        item = response.meta['item']
+        profile_list = response.css('.pf_l').extract()
+        item['profile'] = '\n'.join(profile_list)
+        yield item
+
+
+

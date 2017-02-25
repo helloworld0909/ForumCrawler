@@ -12,17 +12,19 @@ from scrapy import Item
 class BoardItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    url = Field()
-    name = Field()
+    board_url = Field()
+    board_name = Field()
     pages = Field()
     category = 'board'
 
 
 class PostItem(Item):
-    url = Field()
-    name = Field()
-    author_url = Field()
-    author_name = Field()
+    post_url = Field()
+    post_name = Field()
+    board_url = Field()
+    board_name = Field()
+    user_url = Field()
+    user_name = Field()
     replies = Field()
     pv = Field()
     date_time = Field()
@@ -31,5 +33,9 @@ class PostItem(Item):
 
 
 class UserItem(Item):
+    uid = Field()
+    user_url = Field()
+    user_name = Field()
+    profile = Field()
 
     category = 'user'
