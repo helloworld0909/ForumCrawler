@@ -6,18 +6,25 @@ A Crawler crawls board pages, posts and user info on 1point3acres.com/bbs/,
 and the data will be stored in MySQL database.
 It can be modified to work on some other regular forum web sites.
 
-##### To run the crawler, please input in console:
+#### To run the crawler, please input in console:
     python run.py
 
-##### Dependency:
+#### Dependency:
 1. python2.7<br>
 2. scrapy<br>
 3. pywin32<br>
 3. bs4(BeautifulSoup4)<br>
 4. MySQLdb<br>
 
-##### Log
+### Change Log
 ------
+v0.31<br>
+Parse post context(admission info, user background, etc)<br>
+Changes:
+* Parse post context()
+* Parse admission board correctly
+* trivial Bugs fixed
+
 v0.3<br>
 Finish User page parsing<br>
 Changes:
@@ -40,8 +47,7 @@ Changes:
 * MySQL tables use MyISAM engine
 
 v0.21<br>
-Use Rule to crawl forum, add forum info into MySQL
-
+Use Rule to crawl forum, add forum info into MySQL<br>
 Changes: (Only finish forum part)
 * Scrape forum info
 * Add separate rules with respect to forum, post and user
@@ -49,12 +55,12 @@ Changes: (Only finish forum part)
 * Manage the process of creating tables in settings.py (TABLE_INFO)
 
 v0.2<br>
-Only Crawl urls of board, thread and user sites<br/>
+Only Crawl urls of board, thread and user sites<br>
 Changes:
 * Replace BeautifulSoup with XPath
 * Read cookies from json
 * Add Rules in ForumSpider
 * Add run.py
 
-v0.1<br/>
+v0.1<br>
 Crawl all links under the domain.

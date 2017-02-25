@@ -16,9 +16,8 @@ BOT_NAME = 'ForumCrawler'
 SPIDER_MODULES = ['ForumCrawler.spiders']
 NEWSPIDER_MODULE = 'ForumCrawler.spiders'
 
-# JOBDIR = 'job'
-RETRY_ENABLED = False
-DOWNLOAD_TIMEOUT = 30
+JOBDIR = 'job'
+DOWNLOAD_TIMEOUT = 60
 
 # Logging
 LOG_FILE = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
@@ -37,8 +36,8 @@ TABLE_INFO = {
 
     'post':
         'post_url varchar(100), post_name nvarchar(100), board_url nvarchar(100), board_name nvarchar(40), \
-        user_url varchar(100), user_name nvarchar(30), replies int,pv int, date_time datetime, content text, \
-        PRIMARY KEY (post_url)',
+        user_url varchar(100), user_name nvarchar(30), replies int, pv int, date_time datetime, content text, \
+        context text, PRIMARY KEY (post_url)',
 
     'user':
         'user_url varchar(100), uid int, user_name nvarchar(30), profile text, PRIMARY KEY (user_url)',

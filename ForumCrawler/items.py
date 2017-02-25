@@ -29,6 +29,7 @@ class PostItem(Item):
     pv = Field()
     date_time = Field()
     content = Field()
+    context = Field()
     category = 'post'
 
 

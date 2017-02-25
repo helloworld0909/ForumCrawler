@@ -31,7 +31,7 @@ class ForumSpider(CrawlSpider):
              restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies'),
 
         # User page
-        Rule(LinkExtractor(allow=('bbs/space-uid',), restrict_xpaths='//*[@id="hd"]/following::*'),
+        Rule(LinkExtractor(allow=('bbs/space-uid-\d+',), restrict_xpaths='//*[@id="hd"]/following::*'),
              callback='parse_user', follow=True, process_request='append_cookies'),
     )
     # Get cookies from a json file
@@ -89,8 +89,7 @@ class ForumSpider(CrawlSpider):
         item['replies'] = replies
         item['date_time'] = date_time
 
-        # 删除垃圾节点，比如<i>这种；这里写的感觉不太好，待修改
-        # TODO To be improved
+        # Delete abundant nodes using BeautifulSoup
         raw_content = response.xpath('//td[@class="t_f"]').extract_first(default='')
         raw_content_soup = BS(raw_content, 'lxml')
         [s.extract() for s in raw_content_soup(['i', 'span'])]
@@ -101,19 +100,27 @@ class ForumSpider(CrawlSpider):
         content = raw_content_soup.text.strip()
         item['content'] = content
 
+        # Parse context
+        result = response.xpath('//div[@class="pcb"]/u').xpath('string(.)').extract_first(default='')
+        bkg = '\n'.join(response.xpath('//div[@class="pcb"]/li').xpath('string(.)').extract())
+        if result or bkg:
+            item['context'] = result + '\n\n' + bkg
+        else:
+            item['context'] = ''
+
         yield item
 
     def parse_user(self, response):
-        item = UserItem()
-        item['uid'] = re.search(r'.*uid-(\d+)', response.url).group(1)
+        item = UserItem()        
         item['user_url'] = response.url
         item['user_name'] = response.xpath(r'//h2[@class="xs2"]/a/text()').extract_first(default='')
         try:
+            item['uid'] = re.search(r'.*uid-(\d+)', response.url).group(1)
             profile_url = response.xpath(r'//div[@id="nv"]/ul/li/a/@href').extract()[-1]
         except:
-            # Fail to get profile web page, return userItem
-            self.logger.error('parse error: User profile error\nUser url = {}'.format(response.url))
-            yield item
+            # Fail to get profile web page
+            # self.logger.error('parse error: User profile error\nUser url = {}'.format(response.url))
+            pass
         else:
             yield Request(url=profile_url, callback=self.parse_user_profile, meta={'item': item})
 
