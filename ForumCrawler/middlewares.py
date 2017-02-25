@@ -4,8 +4,13 @@
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
-
 from scrapy import signals
+
+
+# TODO proxy & ip pool
+class ProxyMiddleware(object):
+    http_count = 0
+    https_count = 0
 
 
 class ForumCrawlerMiddleware(object):

@@ -16,7 +16,7 @@ BOT_NAME = 'ForumCrawler'
 SPIDER_MODULES = ['ForumCrawler.spiders']
 NEWSPIDER_MODULE = 'ForumCrawler.spiders'
 
-# JOBDIR = 'jobdir'
+# JOBDIR = 'job'
 RETRY_ENABLED = False
 DOWNLOAD_TIMEOUT = 30
 
@@ -32,14 +32,16 @@ MYSQL_PASSWD = '960423'
 MYSQL_DB = '1point3acres'
 MYSQL_CHARSET = 'utf8'
 TABLE_INFO = {
-    'board': 'url varchar(100), name nvarchar(20), pages int, PRIMARY KEY (url)',
+    'board':
+        'board_url varchar(100), board_name nvarchar(40), pages int, PRIMARY KEY (board_url)',
 
     'post':
-        'url varchar(100),name nvarchar(100),board_url nvarchar(100),board_name nvarchar(20),author_url varchar(100),\
-        author_name nvarchar(30),replies int,pv int,date_time datetime,content text,PRIMARY KEY (url)',
+        'post_url varchar(100), post_name nvarchar(100), board_url nvarchar(100), board_name nvarchar(40), \
+        user_url varchar(100), user_name nvarchar(30), replies int,pv int, date_time datetime, content text, \
+        PRIMARY KEY (post_url)',
 
-    # TODO table_info
-    # 'user': 'url varchar(100), uid int, name nvarchar(30)'
+    'user':
+        'user_url varchar(100), uid int, user_name nvarchar(30), profile text, PRIMARY KEY (user_url)',
 }
 
 ITEM_PIPELINES = {
@@ -55,7 +57,7 @@ ROBOTSTXT_OBEY = True
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 64
 CONCURRENT_REQUESTS_PER_DOMAIN = 32
-CONCURRENT_ITEMS = 128
+CONCURRENT_ITEMS = 512
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
