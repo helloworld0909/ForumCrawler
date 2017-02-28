@@ -10,17 +10,17 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 import time
 
-
 BOT_NAME = 'ForumCrawler'
 
 SPIDER_MODULES = ['ForumCrawler.spiders']
 NEWSPIDER_MODULE = 'ForumCrawler.spiders'
 
 JOBDIR = 'job'
-DOWNLOAD_TIMEOUT = 60
+DOWNLOAD_TIMEOUT = 30
 
 # Logging
-LOG_FILE = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
+LOG_PATH = 'log'
+LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
 LOG_LEVEL = 'INFO'
 
 # MySQL
@@ -30,17 +30,46 @@ MYSQL_USER = 'root'
 MYSQL_PASSWD = '960423'
 MYSQL_DB = '1point3acres'
 MYSQL_CHARSET = 'utf8'
+# TABLE_INFO: pk, fk refer to primary key and foreign key, they must be iterable
 TABLE_INFO = {
-    'board':
-        'board_url varchar(100), board_name nvarchar(40), pages int, PRIMARY KEY (board_url)',
+    'board': {
+        'attrs': {
+            'board_url': 'varchar(100)',
+            'board_name': 'nvarchar(40)',
+            'pages': 'int',
+        },
+        'pk': ('board_url',),
+        'engine': 'MyISAM',
+    },
 
-    'post':
-        'post_url varchar(100), post_name nvarchar(100), board_url nvarchar(100), board_name nvarchar(40), \
-        user_url varchar(100), user_name nvarchar(30), replies int, pv int, date_time datetime, content text, \
-        context text, PRIMARY KEY (post_url)',
+    'post': {
+        'attrs': {
+            'post_url': 'varchar(100)',
+            'post_name': 'nvarchar(100)',
+            'board_url': 'nvarchar(100)',
+            'board_name': 'nvarchar(40)',
+            'user_url': 'varchar(100)',
+            'user_name': 'nvarchar(30)',
+            'replies': 'int',
+            'pv': 'int',
+            'date_time': 'datetime',
+            'content': 'text',
+            'context': 'text',
+        },
+        'pk': ('post_url',),
+        'engine': 'MyISAM',
+    },
 
-    'user':
-        'user_url varchar(100), uid int, user_name nvarchar(30), profile text, PRIMARY KEY (user_url)',
+    'user': {
+        'attrs': {
+            'user_url': 'varchar(100)',
+            'uid': 'int',
+            'user_name': 'nvarchar(30)',
+            'profile': 'text',
+        },
+        'pk': ('user_url',),
+        'engine': 'MyISAM',
+    },
 }
 
 ITEM_PIPELINES = {

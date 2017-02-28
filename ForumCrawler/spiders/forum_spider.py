@@ -22,6 +22,10 @@ class ForumSpider(CrawlSpider):
         Rule(LinkExtractor(allow=('bbs/forum-\d+-1\d', 'bbs/forum-\d+-[2-9]'),
              restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies'),
 
+        # Board page(other pages，another url format) DO NOT PARSE
+        Rule(LinkExtractor(allow=('bbs/forum.php?mod=forumdisplay'),
+             restrict_xpaths='//*[@id="hd"]/following::*'), follow=True, process_request='append_cookies'),
+
         # Post page(first page)
         Rule(LinkExtractor(allow=('bbs/thread-\d+-1-',), restrict_xpaths='//*[@id="hd"]/following::*'),
              callback='parse_post', follow=True, process_request='append_cookies'),

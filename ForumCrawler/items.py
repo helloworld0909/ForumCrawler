@@ -9,9 +9,8 @@ from scrapy import Field
 from scrapy import Item
 
 
+# TODO dynamic item class
 class BoardItem(Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
     board_url = Field()
     board_name = Field()
     pages = Field()
