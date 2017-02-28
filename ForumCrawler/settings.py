@@ -19,7 +19,8 @@ JOBDIR = 'job'
 DOWNLOAD_TIMEOUT = 30
 
 # Logging
-LOG_FILE = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
+LOG_PATH = 'log'
+LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
 LOG_LEVEL = 'INFO'
 
 # MySQL
