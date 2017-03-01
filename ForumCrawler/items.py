@@ -39,3 +39,8 @@ class UserItem(Item):
     profile = Field()
 
     category = 'user'
+
+
+class OfferItem(Item):
+
+    category = 'offer'

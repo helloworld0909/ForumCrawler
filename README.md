@@ -12,12 +12,19 @@ It can be modified to work on some other regular forum web sites.
 #### Dependency:
 1. python2.7<br>
 2. scrapy<br>
-3. pywin32<br>
 3. bs4(BeautifulSoup4)<br>
 4. MySQLdb<br>
+5. pywin32 (For Windows User)<br>
 
 ### Change Log
 ------
+v0.4<br>
+Add some utils<br>
+Changes:
+* Add log_parser
+* Add cookies util
+* Developing gter.net spider
+
 v0.31<br>
 Parse post context(admission info, user background, etc)<br>
 Changes:

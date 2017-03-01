@@ -15,13 +15,13 @@ BOT_NAME = 'ForumCrawler'
 SPIDER_MODULES = ['ForumCrawler.spiders']
 NEWSPIDER_MODULE = 'ForumCrawler.spiders'
 
-JOBDIR = 'job'
+# JOBDIR = 'job'
 DOWNLOAD_TIMEOUT = 30
 
 # Logging
-LOG_PATH = 'log'
-LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
-LOG_LEVEL = 'INFO'
+# LOG_PATH = 'log'
+# LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
+LOG_LEVEL = 'DEBUG'
 
 # MySQL
 MYSQL_HOST = 'localhost'
@@ -80,7 +80,7 @@ ITEM_PIPELINES = {
 # USER_AGENT = 'ForumCrawler (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 64
