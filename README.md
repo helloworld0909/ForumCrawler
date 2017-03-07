@@ -12,12 +12,26 @@ It can be modified to work on some other regular forum web sites.
 #### Dependency:
 1. python2.7<br>
 2. scrapy<br>
-3. pywin32<br>
 3. bs4(BeautifulSoup4)<br>
 4. MySQLdb<br>
+5. pywin32 (For Windows User)<br>
 
 ### Change Log
 ------
+v0.41<br>
+Changes:<br>
+* Divide settings into 2 parts:<br>
+    1. General settings in /<br>
+    2. Custom spider settings in /custom<br>
+* Modify other components to fit this change
+
+v0.4<br>
+Add some utils<br>
+Changes:
+* Add log_parser
+* Add cookies util
+* Developing gter.net spider
+
 v0.31<br>
 Parse post context(admission info, user background, etc)<br>
 Changes:

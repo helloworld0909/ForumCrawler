@@ -39,3 +39,16 @@ class UserItem(Item):
     profile = Field()
 
     category = 'user'
+
+
+class OfferItem(Item):
+    uid = Field()
+    school = Field()
+    degree = Field()
+    major = Field()
+    result = Field()
+    enroll_year = Field()
+    enroll_semester = Field()
+    notice_time = Field()
+
+    category = 'offer'

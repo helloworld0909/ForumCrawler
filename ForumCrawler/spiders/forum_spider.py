@@ -8,10 +8,18 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.http import Request
 
 from ForumCrawler.items import BoardItem, PostItem, UserItem
+from ForumCrawler.custom import acres_settings as settings
 
 
 class ForumSpider(CrawlSpider):
     name = 'Forum'
+    custom_settings = {
+        'JOBDIR': 'job',
+        'LOG_PATH': settings.LOG_PATH,
+        'LOG_FILE': settings.LOG_FILE,
+        'MYSQL_DB': settings.MYSQL_DB,
+        'TABLE_INFO': settings.TABLE_INFO,
+    }
     allowed_domains = ['1point3acres.com']
     rules = (
         # Board page(first page)
