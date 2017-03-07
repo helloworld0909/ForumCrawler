@@ -1,4 +1,4 @@
 from scrapy import cmdline
 
 
-cmdline.execute('scrapy crawl Forum'.split())
+cmdline.execute('scrapy crawl gter'.split())

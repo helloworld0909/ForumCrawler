@@ -18,6 +18,13 @@ It can be modified to work on some other regular forum web sites.
 
 ### Change Log
 ------
+v0.41<br>
+Changes:<br>
+* Divide settings into 2 parts:<br>
+    1. General settings in /<br>
+    2. Custom spider settings in /custom<br>
+* Modify other components to fit this change
+
 v0.4<br>
 Add some utils<br>
 Changes:

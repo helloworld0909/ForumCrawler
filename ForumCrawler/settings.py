@@ -8,19 +8,15 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-import time
-
 BOT_NAME = 'ForumCrawler'
 
 SPIDER_MODULES = ['ForumCrawler.spiders']
 NEWSPIDER_MODULE = 'ForumCrawler.spiders'
 
-# JOBDIR = 'job'
+
 DOWNLOAD_TIMEOUT = 30
 
 # Logging
-# LOG_PATH = 'log'
-# LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
 LOG_LEVEL = 'DEBUG'
 
 # MySQL
@@ -30,47 +26,6 @@ MYSQL_USER = 'root'
 MYSQL_PASSWD = '960423'
 MYSQL_DB = '1point3acres'
 MYSQL_CHARSET = 'utf8'
-# TABLE_INFO: pk, fk refer to primary key and foreign key, they must be iterable
-TABLE_INFO = {
-    'board': {
-        'attrs': {
-            'board_url': 'varchar(100)',
-            'board_name': 'nvarchar(40)',
-            'pages': 'int',
-        },
-        'pk': ('board_url',),
-        'engine': 'MyISAM',
-    },
-
-    'post': {
-        'attrs': {
-            'post_url': 'varchar(100)',
-            'post_name': 'nvarchar(100)',
-            'board_url': 'nvarchar(100)',
-            'board_name': 'nvarchar(40)',
-            'user_url': 'varchar(100)',
-            'user_name': 'nvarchar(30)',
-            'replies': 'int',
-            'pv': 'int',
-            'date_time': 'datetime',
-            'content': 'text',
-            'context': 'text',
-        },
-        'pk': ('post_url',),
-        'engine': 'MyISAM',
-    },
-
-    'user': {
-        'attrs': {
-            'user_url': 'varchar(100)',
-            'uid': 'int',
-            'user_name': 'nvarchar(30)',
-            'profile': 'text',
-        },
-        'pk': ('user_url',),
-        'engine': 'MyISAM',
-    },
-}
 
 ITEM_PIPELINES = {
     'ForumCrawler.pipelines.MySQLPipeline': 300,
@@ -91,7 +46,7 @@ CONCURRENT_ITEMS = 512
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 # DOWNLOAD_DELAY = 3
-# The download delay setting will honor only one of:
+# The download delay custom will honor only one of:
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED = False
