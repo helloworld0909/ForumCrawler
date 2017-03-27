@@ -42,7 +42,10 @@ class UserItem(Item):
 
 
 class OfferItem(Item):
+    url = Field()
+    offer_type = Field()
     uid = Field()
+
     school = Field()
     degree = Field()
     major = Field()
@@ -50,5 +53,18 @@ class OfferItem(Item):
     enroll_year = Field()
     enroll_semester = Field()
     notice_time = Field()
+
+    toefl = Field()
+    ielts = Field()
+    gre = Field()
+    sub = Field()
+    gmat = Field()
+    undergraduate_gpa = Field()
+    undergraduate_school = Field()
+    undergraduate_major = Field()
+    master_gpa = Field()
+    master_school = Field()
+    master_major = Field()
+    other_info = Field()
 
     category = 'offer'

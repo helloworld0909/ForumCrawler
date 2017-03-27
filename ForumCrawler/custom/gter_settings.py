@@ -14,16 +14,31 @@ MYSQL_DB = 'gter'
 TABLE_INFO = {
     'offer': {
         'attrs': {
+            'url': 'varchar(500)',
+            'offer_type': 'varchar(100)',
             'uid': 'int',
-            'school': 'varchar(100)',
-            'degree': 'varchar(10)',
-            'major': 'varchar(30)',
-            'result': 'varchar(20)',
-            'enroll_year': 'varchar(10)',
-            'enroll_semester': 'varchar(10)',
-            'notice_time': 'date'
+
+            'school': 'varchar(500)',
+            'degree': 'varchar(500)',
+            'major': 'varchar(500)',
+            'result': 'varchar(500)',
+            'enroll_year': 'varchar(500)',
+            'enroll_semester': 'varchar(500)',
+            'notice_time': 'date',
+
+            'toefl': 'varchar(500)',
+            'ielts': 'varchar(500)',
+            'gre': 'varchar(500)',
+            'sub': 'varchar(500)',
+            'gmat': 'varchar(500)',
+            'undergraduate_gpa': 'varchar(500)',
+            'undergraduate_school': 'varchar(500)',
+            'undergraduate_major': 'varchar(500)',
+            'master_gpa': 'varchar(500)',
+            'master_school':'varchar(500)',
+            'master_major':'varchar(500)',
+            'other_info': 'varchar(500)',
         },
-        'pk': ('uid',),
         'engine': 'MyISAM',
     },
 
