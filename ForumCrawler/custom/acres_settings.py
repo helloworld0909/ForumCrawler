@@ -4,8 +4,11 @@ import time
 JOBDIR = 'job'
 
 # Logging
-LOG_PATH = 'acres_log'
+LOG_PATH = 'log/log_1point3acres'
 LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
+
+# Cookies
+COOKIES_FILE = 'cookies/acres.txt'
 
 # MySQL
 MYSQL_DB = '1point3acres'

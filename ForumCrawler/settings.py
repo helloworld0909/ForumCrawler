@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = 'ForumCrawler.spiders'
 DOWNLOAD_TIMEOUT = 30
 
 # Logging
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 
 # MySQL
 MYSQL_HOST = 'localhost'
