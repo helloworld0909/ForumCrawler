@@ -48,9 +48,8 @@ class GterSpider(scrapy.Spider):
 
     def parse_offer_list(self, response):
         max_page = re.search('\d+', response.xpath('//a[@class="last"]/text()').extract_first(default='0')).group(0)
-        for page in range(1, max_page + 1):
-            url = response.url + '&page={}'.format(page)
-            print url
+        for page in range(1, int(max_page) + 1):
+            url = response.url + '&page={}'.format(str(page))
             yield Request(url=url, callback=self.parse_offer,
                           meta={'cookiejar': 1, 'offer_type': response.meta['offer_type']})
 
