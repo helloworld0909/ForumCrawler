@@ -1,13 +1,17 @@
 ForumCrawler
 ------
-###### A Scrapy ForumCrawler on 1point3acres.com/bbs/
+###### A ForumCrawler crawls study aboard forums
 
-A Crawler crawls board pages, posts and user info on 1point3acres.com/bbs/,
-and the data will be stored in MySQL database.
+A Crawler crawls board pages, posts and user info from ordinary forums based on Discuz,
+and the data will be stored in MySQL database. It can also crawl specific information like offer information from study aborad forums.
 It can be modified to work on some other regular forum web sites.
 
 #### To run the crawler, please input in console:
-    python run.py
+    python run.py <spider name>
+
+##### Available spiders:
+* Forum
+* gter
 
 #### Dependency:
 1. python2.7<br>
@@ -18,6 +22,11 @@ It can be modified to work on some other regular forum web sites.
 
 ### Change Log
 ------
+v0.5<br>
+Changes:<br>
+* Finish offer_spider, which can crawl offer info from bbs.gter.net<br>
+* run.py can pass parameters
+
 v0.41<br>
 Changes:<br>
 * Divide settings into 2 parts:<br>
