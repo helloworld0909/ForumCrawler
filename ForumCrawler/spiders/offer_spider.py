@@ -19,7 +19,7 @@ class GterSpider(scrapy.Spider):
         'TABLE_INFO': settings.TABLE_INFO
     }
     allowed_domains = ['gter.net']
-    with open(os.getcwd() + '/cookies.txt', 'r') as cookies_file:
+    with open(os.getcwd() + '/' + settings.COOKIES_FILE, 'r') as cookies_file:
         cookies = cookies_to_dict(cookies_file.read())
 
     def start_requests(self):
