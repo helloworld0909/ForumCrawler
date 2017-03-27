@@ -91,3 +91,7 @@ ENV/
 .ropeproject
 
 # Created by .ignore support plugin (hsz.mobi)
+
+# User
+/job
+*.out
