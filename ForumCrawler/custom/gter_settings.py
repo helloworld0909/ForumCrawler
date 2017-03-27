@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import time
 # Logging
-LOG_PATH = 'gter_log'
+LOG_PATH = 'log/log_gter'
 LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
+
+# Cookies
+COOKIES_FILE = 'cookies/gter.txt'
 
 # MySQL
 MYSQL_DB = 'gter'

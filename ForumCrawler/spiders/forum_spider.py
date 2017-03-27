@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import os
 import re
 import json
 from bs4 import BeautifulSoup as BS
@@ -7,6 +8,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.http import Request
 
+from ForumCrawler.util.cookies import cookies_to_dict
 from ForumCrawler.items import BoardItem, PostItem, UserItem
 from ForumCrawler.custom import acres_settings as settings
 
@@ -48,12 +50,12 @@ class ForumSpider(CrawlSpider):
     )
     # Get cookies from a json file
     start_urls = ['http://www.1point3acres.com/bbs/']
-    with open('cookies.json', 'r') as cookies_file:
-        cls_cookies = json.load(cookies_file)
+    with open(os.getcwd() + '/' + settings.COOKIES_FILE, 'r') as cookies_file:
+        cookies = cookies_to_dict(cookies_file.read())
 
     # 重写Rule类的append_cookies函数，本来是直接return request，现在加上cookies再return，实现利用cookies的login
     def append_cookies(self, request):
-        request.cookies = self.cls_cookies
+        request.cookies = self.cookies
         return request
 
     def parse_board(self, response):
