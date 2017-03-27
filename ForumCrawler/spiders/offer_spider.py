@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import os
+import re
 import requests
+import urllib
 import scrapy
 from scrapy.http import Request
 
@@ -41,8 +43,16 @@ class GterSpider(scrapy.Spider):
             url = response.xpath('//a[contains(text(), "Offer榜")]/@href').extract()[-1]
         except:
             raise Exception('Parse offer rank error: {}'.format(response.url))
-        yield Request(url=url, callback=self.parse_offer,
+        yield Request(url=url, callback=self.parse_offer_list,
                       meta={'cookiejar': 1, 'offer_type': response.meta['offer_type']})
+
+    def parse_offer_list(self, response):
+        max_page = re.search('\d+', response.xpath('//a[@class="last"]/text()').extract_first(default='0')).group(0)
+        for page in range(1, max_page + 1):
+            url = response.url + '&page={}'.format(page)
+            print url
+            yield Request(url=url, callback=self.parse_offer,
+                          meta={'cookiejar': 1, 'offer_type': response.meta['offer_type']})
 
     def parse_offer(self, response):
         pass
