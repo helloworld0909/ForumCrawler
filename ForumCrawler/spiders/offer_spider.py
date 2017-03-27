@@ -50,15 +50,25 @@ class GterSpider(scrapy.Spider):
         cookies = cookies_to_dict(cookies_file.read())
 
     def start_requests(self):
-        print self.settings['MYSQL_DB']
         start_url = 'http://bbs.gter.net/'
         res = requests.get(url=start_url, cookies=self.cookies)
 
         selector = scrapy.Selector(text=res.text)
-        link_list = selector.xpath('//div[@id="category_454"]/table/tr/td/h2/a')
-        url_list = link_list.xpath('./@href').extract()
-        offer_type_list = link_list.xpath('./text()').extract()
+
+        # Construct forum list which we will crawl
+        url_list = []
+        offer_type_list = []
+
+        tmp_list = selector.xpath('//div[@id="category_454"]/table/tr/td/h2/a')
+        url_list.extend(tmp_list.xpath('./@href').extract())
+        offer_type_list.extend(tmp_list.xpath('./text()').extract())
+
+        for category_num in ['438', '626', '956', '1097']:
+            link_list = selector.xpath('//div[@id="category_{}"]/table/tr/td/h2/a[contains(text(), "留学")]'.format(category_num))
+            url_list.extend(link_list.xpath('./@href').extract())
+            offer_type_list.extend(link_list.xpath('./text()').extract())
         assert len(url_list) == len(offer_type_list)
+        # There are 19 forums
         for url, offer_type in zip(url_list, offer_type_list):
             yield Request(url=url, callback=self.parse_offer_list_first_page, cookies=self.cookies,
                           meta={'cookiejar': 1, 'offer_type': offer_type})
@@ -119,5 +129,7 @@ class GterSpider(scrapy.Spider):
                 except:
                     continue
 
-        yield item
+        # Ignore empty items
+        if item.__len__() > 3:
+            yield item
 

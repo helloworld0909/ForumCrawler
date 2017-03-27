@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 
-JOBDIR = 'job'
+JOBDIR = 'job_1point3acres'
 
 # Logging
 LOG_PATH = 'log/log_1point3acres'

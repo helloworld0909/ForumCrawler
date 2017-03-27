@@ -10,7 +10,7 @@ It can be modified to work on some other regular forum web sites.
     python run.py <spider name>
 
 ##### Available spiders:
-* Forum
+* forum
 * gter
 
 #### Dependency:
@@ -24,8 +24,9 @@ It can be modified to work on some other regular forum web sites.
 ------
 v0.5<br>
 Changes:<br>
-* Finish offer_spider, which can crawl offer info from bbs.gter.net<br>
-* run.py can pass parameters
+* Finish offer_spider, which can crawl offer info from bbs.gter.net
+* Improve run.py, choose different LOG_FILE and JOBDIR for different spiders
+* Automatically ignore empty offer items
 
 v0.41<br>
 Changes:<br>
