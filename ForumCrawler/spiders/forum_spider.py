@@ -10,11 +10,11 @@ from scrapy.http import Request
 
 from ForumCrawler.util.cookies import cookies_to_dict
 from ForumCrawler.items import BoardItem, PostItem, UserItem
-from ForumCrawler.custom import acres_settings as settings
+from ForumCrawler.custom import forum_settings as settings
 
 
 class ForumSpider(CrawlSpider):
-    name = 'Forum'
+    name = 'forum'
     custom_settings = {
         'JOBDIR': 'job',
         'LOG_PATH': settings.LOG_PATH,

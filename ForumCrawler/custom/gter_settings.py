@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import time
+
+JOBDIR = 'job_gter'
+
 # Logging
 LOG_PATH = 'log/log_gter'
 LOG_FILE = LOG_PATH + '/' + time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime()) + '.log'
@@ -37,7 +40,7 @@ TABLE_INFO = {
             'master_gpa': 'varchar(500)',
             'master_school':'varchar(500)',
             'master_major':'varchar(500)',
-            'other_info': 'varchar(500)',
+            'other_info': 'varchar(1000)',
         },
         'engine': 'MyISAM',
     },
